@@ -9,7 +9,6 @@ namespace sifteoOpenner
 {
     class Program
     {
-        //public static string url = "C:\\Users\\Pc\\Desktop\\Cvmfortress\\CP\\Laws\\sifteo\\sdk";
         public static string url = Properties.Settings.Default.Url;
 
         static void Main(string[] args)
@@ -56,6 +55,10 @@ namespace sifteoOpenner
                     }
 
                 }
+                else if (final[0] == "dir")
+                {
+                    srch();
+                }
                 else
                 {
                     open(final[0]);
@@ -93,11 +96,30 @@ namespace sifteoOpenner
             using (StreamWriter sw = p1.StandardInput)
             {
                 sw.WriteLine("rem SDK Setup Script for Windows");
+                sw.WriteLine(String.Format("set SDK_DIR={0}", url));
                 sw.WriteLine(String.Format("set PATH={0}\\bin;%PATH%", url));
-                sw.WriteLine(String.Format("cd {0}\\examples\\{1}", url, project));
+                sw.WriteLine(String.Format("cd {0}\\projects\\{1}", url, project));
                 sw.WriteLine("make");
                 sw.WriteLine("exit");
-                Thread.Sleep(1000);
+                Thread.Sleep(2000);
+                Console.Write("\n-------------------------------\nInsira seu comando:\n>>");
+            }
+            p1.Close();
+        }
+        public static void srch()
+        {
+            Process p1 = new Process();
+            p1.StartInfo.FileName = "CMD.exe";
+            p1.StartInfo.RedirectStandardInput = true;
+            p1.StartInfo.UseShellExecute = false;
+
+            p1.Start();
+            using (StreamWriter sw = p1.StandardInput)
+            {
+                sw.WriteLine(String.Format("cd {0}\\projects", url));
+                sw.WriteLine("dir");
+
+                Thread.Sleep(800);
                 Console.Write("\n-------------------------------\nInsira seu comando:\n>>");
             }
             p1.Close();
