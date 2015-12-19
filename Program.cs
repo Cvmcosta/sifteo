@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-
+//Im gonna make it more responsive
 namespace OpenSifteo
 {
     class Program
