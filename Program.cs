@@ -6,6 +6,8 @@ namespace OpenSifteo
 {
     class Program
     {
+        public static string url = "C:\\Users\\Cvmcosta\\Desktop\\Cvmfortress\\CP\\Laws\\sifteo\\sdk";
+
         static void Main(string[] args)
         {
             while (true)
@@ -15,7 +17,14 @@ namespace OpenSifteo
                 string []final = project.Split(' ');
                 if (final[0] == "make")//add try catch here
                 {
-                    build(final[1]);
+                    try
+                    {
+                        build(final[1]);
+                    }
+                    catch
+                    {
+                        open(final[0]);
+                    }
                 }
                 else
                 {
@@ -34,12 +43,13 @@ namespace OpenSifteo
             p1.Start();
             using (StreamWriter sw = p1.StandardInput)
             {
-                sw.WriteLine("cd C:\\Users\\Cvmcosta\\Desktop\\Cvmfortress\\CP\\Laws\\sifteo\\sdk\\bin");
-                sw.WriteLine(String.Format("siftulator C:\\Users\\Cvmcosta\\Desktop\\Cvmfortress\\CP\\Laws\\sifteo\\sdk\\examples\\{0}\\{0}.elf", project));
+                sw.WriteLine(String.Format("cd {0}\\bin", url));
+                sw.WriteLine(String.Format("siftulator {0}\\projects\\{1}\\{1}.elf", url, project));
                 sw.WriteLine("exit");
             }
             p1.Close();
         }
+
         public static void build(string project)
         {
             Process p1 = new Process();
@@ -51,8 +61,8 @@ namespace OpenSifteo
             using (StreamWriter sw = p1.StandardInput)
             {
                 sw.WriteLine("rem SDK Setup Script for Windows");
-                sw.WriteLine("set PATH=C:\\Users\\Cvmcosta\\Desktop\\Cvmfortress\\CP\\Laws\\sifteo\\sdk\\bin;%PATH%");
-                sw.WriteLine(String.Format("cd C:\\Users\\Cvmcosta\\Desktop\\Cvmfortress\\CP\\Laws\\sifteo\\sdk\\examples\\{0}", project));
+                sw.WriteLine(String.Format("set PATH={0}\\bin;%PATH%", url));
+                sw.WriteLine(String.Format("cd {0}\\examples\\{1}", url, project));
                 sw.WriteLine("make");
                 sw.WriteLine("exit");
             }
