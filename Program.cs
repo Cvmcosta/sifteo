@@ -1,20 +1,49 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-//Im gonna make it more responsive
-namespace OpenSifteo
+using System.Threading;
+
+
+
+namespace sifteoOpenner
 {
     class Program
     {
-        public static string url = "C:\\Users\\Cvmcosta\\Desktop\\Cvmfortress\\CP\\Laws\\sifteo\\sdk";
+        //public static string url = "C:\\Users\\Pc\\Desktop\\Cvmfortress\\CP\\Laws\\sifteo\\sdk";
+        public static string url = Properties.Settings.Default.Url;
 
         static void Main(string[] args)
         {
+
+            if (Properties.Settings.Default.IsFirstTime)
+            {
+                Properties.Settings.Default.IsFirstTime = !Properties.Settings.Default.IsFirstTime;
+                Console.WriteLine("Insira o endereço da pasta projetos: ");
+                Properties.Settings.Default.Url = Console.ReadLine();
+                url = Properties.Settings.Default.Url;
+                Properties.Settings.Default.Save();
+            }
+            else
+            {
+                Console.WriteLine("Deseja mudar o endereço de projetos? s/n :");
+                string bol = Console.ReadLine();
+                if (bol == "s" || bol == "S")
+                {
+                    Console.WriteLine("\nInsira o novo endereço da pasta projetos: ");
+                    Properties.Settings.Default.Url = Console.ReadLine();
+                    url = Properties.Settings.Default.Url;
+                    Properties.Settings.Default.Save();
+                }
+
+            }
+            Console.WriteLine("Se for apenas abrir, insira o nome do projeto. Se for conmpilar insira a palavra 'make' antes do nome do projeto que deseja compilar >>");
+            Console.Write("\n--------------------------------\nInsira seu comando:\n>>");
             while (true)
             {
-                string project;                
+                string project;
                 project = Console.ReadLine();
-                string []final = project.Split(' ');
+                Console.WriteLine("\n---------------------------------------");
+                string[] final = project.Split(' ');
                 if (final[0] == "make")//add try catch here
                 {
                     try
@@ -25,6 +54,7 @@ namespace OpenSifteo
                     {
                         open(final[0]);
                     }
+
                 }
                 else
                 {
@@ -46,6 +76,8 @@ namespace OpenSifteo
                 sw.WriteLine(String.Format("cd {0}\\bin", url));
                 sw.WriteLine(String.Format("siftulator {0}\\projects\\{1}\\{1}.elf", url, project));
                 sw.WriteLine("exit");
+                Thread.Sleep(800);
+                Console.Write("\n-------------------------------\nInsira seu comando:\n>>");
             }
             p1.Close();
         }
@@ -65,8 +97,11 @@ namespace OpenSifteo
                 sw.WriteLine(String.Format("cd {0}\\examples\\{1}", url, project));
                 sw.WriteLine("make");
                 sw.WriteLine("exit");
+                Thread.Sleep(1000);
+                Console.Write("\n-------------------------------\nInsira seu comando:\n>>");
             }
             p1.Close();
         }
+
     }
 }
