@@ -47,13 +47,27 @@ namespace sifteoOpenner
                 {
                     try
                     {
-                        build(final[1]);
+                        if (final[1] == "clean")
+                        {
+                            try
+                            {
+                                clean(final[2]);
+                            }
+                            catch (IndexOutOfRangeException)
+                            {
+                                Console.WriteLine("Error, no project specified.");
+                                Console.Write("\n-------------------------------\nInsira seu comando:\n>>");
+                            }
+                        }
+                        else
+                        {
+                            build(final[1]);
+                        }
                     }
-                    catch
+                    catch (IndexOutOfRangeException)
                     {
                         open(final[0]);
                     }
-
                 }
                 else if (final[0] == "dir")
                 {
@@ -120,6 +134,27 @@ namespace sifteoOpenner
                 sw.WriteLine("dir");
 
                 Thread.Sleep(800);
+                Console.Write("\n-------------------------------\nInsira seu comando:\n>>");
+            }
+            p1.Close();
+        }
+        public static void clean(string project)
+        {
+            Process p1 = new Process();
+            p1.StartInfo.FileName = "CMD.exe";
+            p1.StartInfo.RedirectStandardInput = true;
+            p1.StartInfo.UseShellExecute = false;
+
+            p1.Start();
+            using (StreamWriter sw = p1.StandardInput)
+            {
+                sw.WriteLine("rem SDK Setup Script for Windows");
+                sw.WriteLine(String.Format("set SDK_DIR={0}", url));
+                sw.WriteLine(String.Format("set PATH={0}\\bin;%PATH%", url));
+                sw.WriteLine(String.Format("cd {0}\\projects\\{1}", url, project));
+                sw.WriteLine("make clean");
+                sw.WriteLine("exit");
+                Thread.Sleep(2000);
                 Console.Write("\n-------------------------------\nInsira seu comando:\n>>");
             }
             p1.Close();
